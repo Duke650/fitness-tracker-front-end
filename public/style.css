@@ -1,9 +1,54 @@
-* {
-    margin: 0;
+/* h1 {
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+}
+.form-control {
+  max-width: 110%;
 }
 
-.navbar {
-    display: flex;
-    justify-content: center;
-    text-align: center;
+.form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
+.signup {
+  display: flex;
+  justify-content: center;
+}
+#username {
+  margin-bottom: 10px;
+}
+
+#password {
+  margin-bottom: 15px;
+}
+
+#login-btn {
+  background-color: black;
+}
+
+#routine-container {
+  background-color: blanchedalmond;
+} */
+
+/* #create-routine {
+
+  text-align: center;   
+  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
+  font: bold 20px;
+  max-width: 50%;
+  text-decoration: none;
+  background-color: #eeeeee;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #cccccc;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #cccccc;
+} */
+

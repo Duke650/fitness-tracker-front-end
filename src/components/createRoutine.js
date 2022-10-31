@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function CreateRoutine({ setRoutines, token }) {
+export default function CreateRoutine({ setRoutines, token, routineName, setRoutineName, routineGoal, setRoutineGoal, isPublic, setIsPublic}) {
     const navigate = useNavigate()
-  const [routineName, setRoutineName] = useState("");
-  const [routineGoal, setRoutineGoal] = useState("");
-  const [isPublic, setIsPublic] = useState(false);
 
   const handleCreateRoutine = async (e) => {
     try {
@@ -27,6 +24,7 @@ export default function CreateRoutine({ setRoutines, token }) {
     );
     const result = await resp.json();
     result.activities = [];
+    console.log("result :>> ", result);
     setRoutines((prev) => [result, ...prev]);
     navigate("/")
     } catch (err) {
@@ -54,7 +52,7 @@ export default function CreateRoutine({ setRoutines, token }) {
           id="isPublic"
           onChange={() => setIsPublic(!isPublic)}
         />
-        <label htmlFor="isPublic">Public</label>
+        <label htmlFor="isPublic">make public?</label>
         <input
           type="submit"
           value="Create Routine"

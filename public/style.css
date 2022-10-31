@@ -52,3 +52,32 @@
   border-left: 1px solid #cccccc;
 } */
 
+.headers {
+  display: flex;
+  justify-content: center;
+}
+
+
+
+.create-routine-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.card {
+  margin: 20px;
+}
+
+.myRoutines-container {
+  margin: 20px;
+}
+
+.create-routine {
+  display: flex;
+  justify-content: center;
+}
+
+.logout-btn {
+  text-align: right;
+}

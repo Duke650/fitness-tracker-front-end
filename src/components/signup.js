@@ -7,10 +7,10 @@ export default function Signup({
   username,
   password,
   token,
-  setToken
+  setToken,
 }) {
   const navigate = useNavigate();
-    console.log('username, signup :>> ', username, password);
+  console.log("username, signup :>> ", username, password);
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
@@ -22,8 +22,8 @@ export default function Signup({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-              username,
-              password
+            username,
+            password,
           }),
         }
       );
@@ -34,7 +34,7 @@ export default function Signup({
         throw result.error.message;
       }
       setToken(result.data.token);
-      
+
       // navigate("/users/me")
     } catch (err) {
       console.error(err);
@@ -45,15 +45,14 @@ export default function Signup({
       <h1>Sign up</h1>
       <div className="form">
         <form>
-          <div className="form-floating mb-3">
-            <input
-              type="text"
-              placeholder="Username"
-              className="form-control"
-              id="username"
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Username"
+            className="form-control"
+            id="username"
+            onChange={(e) => setUsername(e.target.value)}
+          />
+
           <input
             type="password"
             placeholder="Password"

@@ -6,13 +6,19 @@ import MyRoutines from "./myRoutines";
 import Login from "./login";
 import Signup from "./signup";
 import CreateRoutine from "./createRoutine"
+import { callApi } from "../api/utils";
 
 export default function App() {
   const [username, setUsername] = useState(window.localStorage.getItem("username") || "");
   const [password, setPassword] = useState(window.localStorage.getItem("password") || "");
   const [token, setToken] = useState(window.localStorage.getItem("token") || "");
   const [routines, setRoutines] = useState([]);
-  console.log('token :>> ', token);
+  const [routineName, setRoutineName] = useState("");
+  const [routineGoal, setRoutineGoal] = useState("");
+  const [isPublic, setIsPublic] = useState(false);
+  const [ activities, setActivities ] = useState([]);
+  const [myRoutines, setMyRoutines] = useState([]);
+  const [ error, setError ] = useState("")
 
   useEffect(() => {
     window.localStorage.setItem("username", username)
@@ -28,16 +34,8 @@ export default function App() {
 
   const fetchRoutines = async (e) => {
     try {
-      const resp = await fetch(
-        "http://fitnesstrac-kr.herokuapp.com/api/routines",
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const result = await resp.json();
-      setRoutines(result);
+      const data = await callApi({path: "/routines"})
+      setRoutines(data);
     } catch (err) {
       console.error(err);
     }
@@ -46,11 +44,39 @@ export default function App() {
     fetchRoutines();
   }, []);
 
+  const fetchMyRoutines = async () => {
+    try {
+      const resp = await fetch(
+        `http://fitnesstrac-kr.herokuapp.com/api/users/${username}/routines`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const result = await resp.json();
+      setMyRoutines(result);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleLogout = () => {
     setUsername("");
     setPassword("");
     setToken("");
   }
+
+  const handleDelete = async (idToDelete) => {
+    try {
+        await callApi({method: "DELETE", token, path: `/routines/${idToDelete}`})
+        const newRoutines = routines.filter((r) => r.id !== idToDelete);
+        setRoutines(newRoutines);
+        fetchMyRoutines()
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div>
@@ -69,35 +95,24 @@ export default function App() {
             <li className="nav-item">
               <Link to="/activites" className="nav-link">Activites</Link>
             </li>
-            <li className="nav-item">
+            {token && <li className="nav-item">
               <Link to="/myroutines" className="nav-link">My Routines</Link>
-            </li>
-            <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown link
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </li>}
           </ul>
-        </li>
-          </ul>
-          <ul className="nav navbar-nav navbar-right">
-           { token ? <li>
-            <Link to="/routines" className="btn btn-outline-danger" onClick={handleLogout}>
+           { token ? 
+            <Link to="/routines" className="btn btn-outline-danger logout-btn" onClick={handleLogout}>
                 Logout
               </Link>
-            </li> : <Link to="/login" className="btn btn-outline-primary">
+            : <Link to="/login" className="btn btn-outline-primary">
                 Login
               </Link>}
-          </ul>
+          
           </div>
         </div>
       </nav>
       <Routes>
-        <Route path="/" element={<Routines routines={routines} setRoutines={setRoutines} username={username} token={token}/>}></Route>
-        <Route path="/activites" element={<Activites />}></Route>
+        <Route path="/" element={<Routines routines={routines} setRoutines={setRoutines} username={username} handleDelete={handleDelete} fetchRoutines={fetchRoutines}token={token} activities={activities}/>}></Route>
+        <Route path="/activites" element={<Activites token={token} activities={activities} setActivities={setActivities}/>}></Route>
         <Route
           path="/login"
           element={
@@ -107,10 +122,12 @@ export default function App() {
               username={username}
               password={password}
               setToken={setToken}
+              error={error}
+              setError={setError}
             />
           }
         ></Route>
-        <Route path="/myroutines" element={<MyRoutines username={username}/>}></Route>
+        <Route path="/myroutines" element={<MyRoutines username={username} handleDelete={handleDelete} routines={routines} setRoutines={setRoutines} activities={activities} token={token} fetchMyRoutines={fetchMyRoutines} myRoutines={myRoutines} setMyRoutines={setMyRoutines} routineName={routineName} setRoutineName={setRoutineName} routineGoal={routineGoal} setRoutineGoal={setRoutineGoal} isPublic={isPublic} setIsPublic={setIsPublic}/>}></Route>
         <Route
           path="/signup"
           element={
@@ -123,7 +140,7 @@ export default function App() {
             />
           }
         ></Route>
-        <Route path="/createRoutine" element={<CreateRoutine routines={routines} setRoutines={setRoutines} token={token}/>}></Route>
+        <Route path="/createRoutine" element={<CreateRoutine setRoutines={setRoutines} token={token} routineName={routineName} setRoutineName={setRoutineName} routineGoal={routineGoal} setRoutineGoal={setRoutineGoal} isPublic={isPublic} setIsPublic={setIsPublic}/>}></Route>
       </Routes>
     </div>
   );

@@ -7,9 +7,6 @@ export default function Routines({
   fetchRoutines,
 }) {
 
-  useEffect(() => {
-    fetchRoutines;
-  });
 
   return (
     <div>

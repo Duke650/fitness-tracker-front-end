@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function CreateRoutine({ setRoutines, token, routineName, setRoutineName, routineGoal, setRoutineGoal, isPublic, setIsPublic}) {
+export default function CreateRoutine({ setRoutines, token, routineName, setRoutineName, routineGoal, setRoutineGoal, isPublic, setIsPublic, error, setError}) {
     const navigate = useNavigate()
 
   const handleCreateRoutine = async (e) => {
+    e.preventDefault();
     try {
-        e.preventDefault();
     const resp = await fetch(
       "http://fitnesstrac-kr.herokuapp.com/api/routines",
       {
@@ -18,15 +18,21 @@ export default function CreateRoutine({ setRoutines, token, routineName, setRout
         body: JSON.stringify({
           name: routineName,
           goal: routineGoal,
-          isPublic,
+          isPublic: isPublic
         }),
       }
     );
     const result = await resp.json();
     result.activities = [];
-    console.log("result :>> ", result);
-    setRoutines((prev) => [result, ...prev]);
+    if(!resp.ok) {
+      setError(result.error)
+    } else {
+      setRoutines((prev) => [result, ...prev]);
+      setError("")
     navigate("/")
+
+    }
+    
     } catch (err) {
         console.error(err);
     }
@@ -50,9 +56,12 @@ export default function CreateRoutine({ setRoutines, token, routineName, setRout
         <input
           type="checkbox"
           id="isPublic"
+          name="isPublic"
+          value={isPublic}
           onChange={() => setIsPublic(!isPublic)}
         />
         <label htmlFor="isPublic">make public?</label>
+        {error && <div>Routine name already exists</div>}
         <input
           type="submit"
           value="Create Routine"

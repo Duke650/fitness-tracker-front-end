@@ -38,6 +38,7 @@ export default function MyRoutines({
         }
       );
       const result = await resp.json();
+      console.log('result :>> ', result);
       setMyRoutines(result);
     } catch (err) {
       console.error(err);
@@ -141,6 +142,7 @@ export default function MyRoutines({
             <h5>Routine: </h5>
             <p>Name: {routine.name}</p>
             <p>Goal: {routine.goal}</p>
+            {routine.isPublic ? <p>Privacy: public</p> : <p>Privacy: private</p>}
             <h5>Activities: </h5>
             {routine.activities.map((a) => {
               return (

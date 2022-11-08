@@ -31,13 +31,13 @@ export default function Login({
       console.log("result :>> ", result);
 
       if (!resp.ok) {
-        setError(result.error) 
-        throw result.message;
-        
-      }
-
+        setError(result.error)
+      } else {
+        setError("")
       setToken(result.token);
       navigate("/");
+      }
+      
     } catch (err) {
       console.error(err);
       

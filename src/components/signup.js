@@ -8,6 +8,8 @@ export default function Signup({
   password,
   token,
   setToken,
+  error,
+  setError
 }) {
   const navigate = useNavigate();
   console.log("username, signup :>> ", username, password);
@@ -27,15 +29,15 @@ export default function Signup({
           }),
         }
       );
-      console.log(resp);
+      
       const result = await resp.json();
-      console.log("result :>> ", result);
       if (!resp.ok) {
-        throw result.error.message;
+        setError(result.error)
       }
-      setToken(result.data.token);
+      setError("")
+      setToken(result.token);
 
-      // navigate("/users/me")
+      navigate("/myroutines")
     } catch (err) {
       console.error(err);
     }
@@ -60,6 +62,7 @@ export default function Signup({
             id="password"
             onChange={(e) => setPassword(e.target.value)}
           />
+          {error && <div>{error}</div>}
           <input
             type="submit"
             value="Sign up"

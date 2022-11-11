@@ -1,4 +1,4 @@
-const baseUrl = "http://fitnesstrac-kr.herokuapp.com/api"
+const baseUrl = "https://fitnesstrac-kr.herokuapp.com/api"
 
 export const callApi = async ({ method, path, token, body }) => {
   const options = {
